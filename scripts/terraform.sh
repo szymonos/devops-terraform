@@ -2,7 +2,7 @@
 az login
 az logout
 az account clear
-az account show | ConvertFrom-Json
+az account show --output jsonc
 az account set --subscription "SZYMONOS-MSDN"
 '
 cd "$SWD/terraform"
@@ -27,8 +27,8 @@ terraform plan -out "terraform.tfplan"
 terraform apply "terraform.tfplan"
 terraform apply -refresh-only
 # use custom tfvars
-terraform plan --var-vile=terraform.tfvars
-terraform apply --var-vile=terraform.tfvars
+terraform plan --var-file=terraform.tfvars
+terraform apply --var-file=terraform.tfvars
 # plan and apply at once
 terraform refresh
 
@@ -46,4 +46,4 @@ terraform import azurerm_resource_group.devops /subscriptions/026b5895-980a-4fdb
 
 # !destroy all resources
 terraform destroy
-terraform destroy --var-vile=terraform.tfvars
+terraform destroy --var-file=terraform.tfvars
