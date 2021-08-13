@@ -1,0 +1,24 @@
+# Temporary files
+\!*.*
+
+# temp folder
+.tmp/
+
+# models folder
+.models/
+
+#  Local .terraform directories
+**/.terraform/*
+
+# .tfstate files
+*.tfstate
+*.tfstate.*
+
+# .tfvars files
+*.tfvars
+
+# .tfplan files
+*.tfplan
+
+# lock file
+.terraform.lock.hcl
