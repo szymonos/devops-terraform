@@ -1,5 +1,6 @@
 : '
 az login
+az login --use-device-code
 az logout
 az account clear
 az account show --output jsonc
