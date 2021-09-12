@@ -5,7 +5,7 @@ az logout
 az account clear
 az account show --output jsonc
 az account set --subscription "SZYMONOS-MSDN"
-rm -fr .terraform* && rm -f *.tfstate*
+rm -fr .terraform*; rm -f *.tfstate*; rm -f *.tfplan*
 '
 cd "$SWD/terraform"
 
