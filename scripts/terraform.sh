@@ -5,9 +5,11 @@ az logout
 az account clear
 az account show --output jsonc
 az account set --subscription "SZYMONOS-MSDN"
-rm -fr .terraform*; rm -f *.tfstate*; rm -f *.tfplan*
+Get-ChildItem .terraform/*, *.tfstate*, *.lock.hcl, *.tfplan | Remove-Item -Recurse -Force
+rm -fr .terraform*; rm -f *.tfstate*; rm -f *.lock.hcl; rm -f *.tfplan*
 '
-cd "$SWD/terraform"
+cd "$SWD/.tmp"
+cd "$SWD/backend"
 
 terraform init
 terraform init -upgrade
@@ -29,8 +31,8 @@ terraform plan -out "terraform.tfplan"
 terraform apply "terraform.tfplan"
 terraform apply -refresh-only
 # use custom tfvars
-terraform plan --var-file=terraform.tfvars
-terraform apply --var-file=terraform.tfvars
+terraform plan --var-file=terraform.tfvars -out "terraform.tfplan"
+terraform apply "terraform.tfplan"
 # plan and apply at once
 terraform refresh
 
@@ -40,12 +42,15 @@ terraform graph | dot -Tsvg > graph.svg
 # *manage state
 terraform state list
 terraform state pull
-terraform state show azurerm_app_service.web_app
-terraform state rm azurerm_app_service.web_app
+terraform state show azurerm_storage_account.default
+terraform state rm azurerm_storage_account.default
 
 # *import resources
-terraform import azurerm_resource_group.devops /subscriptions/026b5895-980a-4fdb-a8fd-f59fe3e04231/resourceGroups/RG-Infra-WEU
+terraform import azurerm_resource_group.default /subscriptions/026b5895-980a-4fdb-a8fd-f59fe3e04231/resourceGroups/RG-Infra-WEU
 
 # !destroy all resources
 terraform destroy
 terraform destroy --var-file=terraform.tfvars
+
+# *test in terraform console
+terraform console

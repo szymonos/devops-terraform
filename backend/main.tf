@@ -1,43 +1,29 @@
-terraform {
-  required_providers {
-    azurerm = {
-      source = "hashicorp/azurerm"
-      # version = "~>2.48"
-    }
-  }
-}
-
-########################################################################
-# *VARIABLES*
-########################################################################
-variable "location" {
-  type    = string
-  default = "westeurope"
-}
-
-variable "rg_devops_name" {
-  type    = string
-  default = "RG-Infra-WEU"
-}
-
-variable "sa_devops_name" {
-  type    = string
-  default = "stacdevopstf"
-}
-
-##################################################################################
-# *PROVIDERS*
-##################################################################################
-provider "azurerm" {
-  subscription_id = "026b5895-980a-4fdb-a8fd-f59fe3e04231" # SZYMONOS-MSDN
-  features {}
-}
-
-##################################################################################
 # *LOCALS*
-##################################################################################
 locals {
   common_tags = {
     ENV = "PROD"
   }
+}
+
+# *RESOURCES*
+resource "azurerm_resource_group" "default" {
+  name     = var.resource_group
+  location = var.location
+  tags     = local.common_tags
+}
+
+resource "azurerm_storage_account" "default" {
+  name                     = var.storage_account
+  location                 = var.location
+  resource_group_name      = azurerm_resource_group.default.name
+  account_tier             = "Standard"
+  account_replication_type = "LRS"
+  min_tls_version          = "TLS1_2"
+
+  tags = local.common_tags
+}
+
+resource "azurerm_storage_container" "default" {
+  name                 = var.container
+  storage_account_name = azurerm_storage_account.default.name
 }

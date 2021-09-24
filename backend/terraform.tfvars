@@ -1,0 +1,5 @@
+subscription_id = "026b5895-980a-4fdb-a8fd-f59fe3e04231"
+location        = "westeurope"
+resource_group  = "RG-Infra-WEU"
+storage_account = "stacdevopstf"
+container       = "terraform-state"
