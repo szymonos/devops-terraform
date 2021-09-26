@@ -1,4 +1,11 @@
 terraform {
+  backend "azurerm" {
+    subscription_id      = "026b5895-980a-4fdb-a8fd-f59fe3e04231"
+    resource_group_name  = "RG-Infra-WEU"
+    storage_account_name = "stacdevopstf"
+    container_name       = "terraform-state"
+    key                  = "res/ml.tfstate"
+  }
   required_providers {
     azurerm = {
       source  = "hashicorp/azurerm"
