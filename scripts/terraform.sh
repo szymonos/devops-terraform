@@ -10,6 +10,7 @@ rm -fr .terraform*; rm -f *.tfstate*; rm -f *.lock.hcl; rm -f *.tfplan*
 '
 cd "$SWD/.tmp"
 cd "$SWD/backend"
+cd "$SWD/machine-learning-service"
 
 terraform init
 terraform init -upgrade
