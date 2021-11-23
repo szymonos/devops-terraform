@@ -1,4 +1,5 @@
 locals {
+  compute_cluster_name    = "default"
   name_base               = "${lower(substr(replace(var.resource_name, "-", ""), 0, 16))}${random_string.random.id}"
   app_insights_name       = "${local.name_base}ai"
   container_registry_name = "${local.name_base}cr"
@@ -70,13 +71,14 @@ resource "azurerm_storage_account" "default" {
 }
 
 resource "azurerm_machine_learning_workspace" "default" {
-  name                    = var.resource_name
-  location                = azurerm_resource_group.default.location
-  resource_group_name     = azurerm_resource_group.default.name
-  application_insights_id = azurerm_application_insights.default.id
-  key_vault_id            = data.azurerm_key_vault.current[0].id
-  storage_account_id      = azurerm_storage_account.default.id
-  container_registry_id   = data.azurerm_container_registry.current[0].id
+  name                     = var.resource_name
+  location                 = azurerm_resource_group.default.location
+  resource_group_name      = azurerm_resource_group.default.name
+  application_insights_id  = azurerm_application_insights.default.id
+  image_build_compute_name = local.compute_cluster_name
+  key_vault_id             = data.azurerm_key_vault.current[0].id
+  storage_account_id       = azurerm_storage_account.default.id
+  container_registry_id    = data.azurerm_container_registry.current[0].id
 
   tags = var.resource_tags
 
@@ -94,7 +96,7 @@ resource "azurerm_machine_learning_workspace" "default" {
 resource "azurerm_machine_learning_compute_cluster" "default" {
   count = var.enable_default_compute ? 1 : 0
 
-  name                          = "default"
+  name                          = local.compute_cluster_name
   location                      = azurerm_resource_group.default.location
   vm_priority                   = var.compute_priority
   vm_size                       = var.compute_size
